@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Astronomy Quiz — Question {{ current }}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a1a;
+            color: #e0e0ff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── TOP HALF: question ── */
+        .top {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px 20px;
+            text-align: center;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #a78bfa;
+            margin-bottom: 16px;
+            letter-spacing: 0.05em;
+        }
+
+        .progress-bar-wrap {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 99px;
+            height: 6px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7c3aed, #06b6d4);
+            border-radius: 99px;
+        }
+
+        .question-text {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #f0f0ff;
+            max-width: 640px;
+            line-height: 1.5;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin: 0;
+        }
+
+        /* ── BOTTOM HALF: choices ── */
+        .bottom {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 30px 40px;
+            gap: 14px;
+        }
+
+        .choice-btn {
+            width: 100%;
+            max-width: 500px;
+            padding: 16px 22px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.05);
+            color: #e0e0ff;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: backgro 0.15s, border-color 0.15s;
+            text-align: left;
+        }
+        .choice-btn:hover:not(:disabled) {
+            background: rgba(124,58,237,0.2);
+            border-color: #7c3aed;
+        }
+        .choice-btn:disabled { cursor: default; }
+
+        .choice-btn.correct {
+            background: rgba(34,197,94,0.15);
+            border-color: #22c55e;
+            color: #86efac;
+        }
+        .choice-btn.incorrect {
+            background: rgba(239,68,68,0.15);
+            border-color: #ef4444;
+            color: #fca5a5;
+        }
+
+        .icon { font-size: 1.3rem; margin-left: 10px; }
+
+        .next-btn {
+            margin-top: 6px;
+            padding: 12px 36px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            display: inline-block;
+        }
+        .next-btn:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+
+<!-- TOP HALF -->
+<div class="top">
+    <div class="progress-text">Question {{ current }} of {{ total }}</div>
+<div class="progress-bar-wrap">
+    <style>
+        .progress-bar-fill { width: {% widthratio current total 100 %}%; }
+    </style>
+    <div class="progress-bar-fill"></div>
+</div>
+    <div class="question-text">{{ question }}</div>
+</div>
+
+<hr class="divider">
+
+<div class="bottom">
+
+    {% if not answered %}
+        <!-- Unanswered: show clickable form buttons -->
+        <form method="post" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:14px;">
+            {% csrf_token %}
+            {% for choice in choices %}
+            <button type="submit" name="choice" value="{{ choice }}" class="choice-btn">
+                <span>{{ choice }}</span>
+            </button>
+            {% endfor %}
+        </form>
+
+    {% else %}
+        <!-- Answered: show results with tick/cross -->
+        {% for choice in choices %}
+            {% if choice == correct %}
+                <button class="choice-btn correct" disabled>
+                    <span>{{ choice }}</span>
+                    <span class="icon">✅</span>
+                </button>
+            {% elif choice == selected %}
+                <button class="choice-btn incorrect" disabled>
+                    <span>{{ choice }}</span>
+                    <span class="icon">❌</span>
+                </button>
+            {% else %}
+                <button class="choice-btn" disabled>
+                    <span>{{ choice }}</span>
+                </button>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next button -->
+        {% if current == total %}
+            <a href="{% url 'results' %}" class="next-btn">See Results 🏆</a>
+        {% else %}
+            <a href="{% url 'quiz' %}" class="next-btn">Next Question →</a>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+</body>
+</html>

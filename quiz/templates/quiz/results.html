@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Astronomy Quiz — Results</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a1a;
+            color: #e0e0ff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .score-block { text-align: center; margin-bottom: 36px; }
+        .emoji { font-size: 3.5rem; }
+        .score-num {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #a78bfa;
+            margin: 10px 0 4px;
+        }
+        .grade { font-size: 1.2rem; color: #c4b5fd; }
+        h2 { font-size: 1rem; color: #a78bfa; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.08em; }
+        .answer-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.04);
+            border-left: 4px solid;
+        }
+        .answer-row.correct { border-color: #22c55e; }
+        .answer-row.incorrect { border-color: #ef4444; }
+        .icon { font-size: 1.1rem; margin-top: 2px; }
+        .q-text { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+        .a-text { font-size: 0.85rem; color: #c0c0e0; }
+        .correct-text { color: #86efac; }
+        .btn {
+            display: block;
+            text-align: center;
+            margin-top: 28px;
+            padding: 14px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="score-block">
+        {% if score == 10 %}
+            <div class="emoji">🌟</div>
+            <div class="score-num">{{ score }} / 10</div>
+            <div class="grade">Perfect score! You're an astronomy genius!</div>
+        {% elif score >= 8 %}
+            <div class="emoji">🚀</div>
+            <div class="score-num">{{ score }} / 10</div>
+            <div class="grade">Excellent work! Almost perfect!</div>
+        {% elif score >= 6 %}
+            <div class="emoji">🪐</div>
+            <div class="score-num">{{ score }} / 10</div>
+            <div class="grade">Good effort! Keep exploring the universe.</div>
+        {% elif score >= 4 %}
+            <div class="emoji">🌙</div>
+            <div class="score-num">{{ score }} / 10</div>
+            <div class="grade">Not bad! A bit more study and you'll shine.</div>
+        {% else %}
+            <div class="emoji">☄️</div>
+            <div class="score-num">{{ score }} / 10</div>
+            <div class="grade">Keep trying! The stars are waiting for you.</div>
+        {% endif %}
+    </div>
+
+    <h2>Your Answers</h2>
+
+    {% for answer in answers %}
+    <div class="answer-row {% if answer.is_correct %}correct{% else %}incorrect{% endif %}">
+        <div class="icon">{% if answer.is_correct %}✅{% else %}❌{% endif %}</div>
+        <div>
+            <div class="q-text">{{ answer.question }}</div>
+            <div class="a-text">You answered: {{ answer.selected }}</div>
+            {% if not answer.is_correct %}
+            <div class="a-text correct-text">Correct answer: {{ answer.correct }}</div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <a href="{% url 'home' %}" class="btn">🔄 Play Again</a>
+</div>
+</body>
+</html>

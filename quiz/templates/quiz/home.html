@@ -1,0 +1,55 @@
+<!-- Home page for quiz -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Astronomy Quiz</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a1a;
+            color: #e0e0ff;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            text-align: center;
+            padding: 60px 50px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+        .emoji { font-size: 4rem; margin-bottom: 16px; }
+        h1 { font-size: 2.2rem; color: #a78bfa; margin-bottom: 12px; }
+        p { color: #c0c0e0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 8px; }
+        .btn {
+            display: inline-block;
+            in-top: 28px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            cursor pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="emoji">🔭</div>
+        <h1>Astronomy Quiz</h1>
+        <p>Think you know the universe?</p>
+        <p>Answer <strong>10 randomised questions</strong> and test your astronomy knowledge!</p>
+        <a href="{% url 'quiz' %}" class="btn">Start Quiz 🚀</a>
+    </div>
+</body>
+</html>
